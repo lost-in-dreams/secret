@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>I</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#05070d;font-family:Georgia, serif;}
+canvas{position:absolute;inset:0;display:block;}
+#startOverlay{position:fixed;inset:0;display:flex;justify-content:center;align-items:center;z-index:20;background:#05070d;}
+#startButton{padding:20px 50px;background:linear-gradient(135deg,#ff8ca7,#ff4f7b);border-radius:30px;color:#fff;font-size:24px;font-weight:bold;cursor:pointer;user-select:none;transition:transform 0.3s ease, opacity 1.5s ease;}
+#startButton:active{transform:scale(0.95);}
+#fade{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;transition:opacity 4s ease;z-index:15;}
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+<div id="fade"></div>
+<div id="startOverlay"><div id="startButton">НАЖМИ</div></div>
+
+<script>
+const overlay=document.getElementById("startOverlay");
+const startBtn=document.getElementById("startButton");
+const fade=document.getElementById("fade");
+const canvas=document.getElementById("bgCanvas");
+const ctx=canvas.getContext("2d");
+const music=document.getElementById("bgMusic");
+
+function resizeCanvas(){canvas.width=innerWidth; canvas.height=innerHeight;}
+resizeCanvas(); window.addEventListener("resize",resizeCanvas);
+
+let particles=[];
+function initParticles(){
+    particles=Array.from({length:0}, ()=>({}));
+}
+initParticles();
+
+function drawParticles(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p=>{
+        p.x+=p.dx; p.y+=p.dy;
+        ctx.beginPath();
+        ctx.fillStyle=`rgba(255,255,255,0.8)`;
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+    });
+    requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+startBtn.addEventListener("click", ()=>{
+    startBtn.style.opacity=0;
+    setTimeout(()=>overlay.style.display="none",1500);
+
+    fade.style.opacity=1;
+
+    setTimeout(()=>{ window.location.href="stage1.html"; },4000);
+});
+</script>
+</body>
+</html>
